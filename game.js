@@ -160,8 +160,20 @@ function drawCoverImage(img){
 function drawScene(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
+  const graphicAreaHeight = canvas.height * 0.52;
+
   if(bg.complete){
-    drawCoverImage(bg);
+    ctx.drawImage(
+      bg,
+      0,
+      0,
+      bg.width,
+      bg.height,
+      0,
+      0,
+      canvas.width,
+      graphicAreaHeight
+    );
   }
 
   const face = faceImages[currentFace];
@@ -169,11 +181,7 @@ function drawScene(){
   if(!face || !face.complete) return;
 
   const size = canvas.width * 0.60;
-
-  const graphicAreaHeight = canvas.height * 0.52;
-
   const drawX = (canvas.width - size) / 2;
-
   const drawY = graphicAreaHeight - size + 40;
 
   ctx.drawImage(
