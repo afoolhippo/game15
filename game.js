@@ -290,6 +290,7 @@ ctx.drawImage(
   size,
   size
 );
+}
 
 /* タイプライター */
 
