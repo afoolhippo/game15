@@ -263,17 +263,33 @@ function drawScene(){
   const face =
     faceImages[currentFace];
 
-  const size =
-    canvas.width * 0.46;
+const size =
+  canvas.width * 0.46;
 
-  ctx.drawImage(
-    face,
-    (canvas.width - size) / 2,
-    canvas.height * 0.16,
-    size,
-    size
-  );
-}
+/*
+  上半分をグラフィック領域として使う
+*/
+
+const graphicAreaHeight =
+  canvas.height * 0.52;
+
+/*
+  キャラを中央下寄せにする
+*/
+
+const drawX =
+  (canvas.width - size) / 2;
+
+const drawY =
+  graphicAreaHeight - size + 24;
+
+ctx.drawImage(
+  face,
+  drawX,
+  drawY,
+  size,
+  size
+);
 
 /* タイプライター */
 
