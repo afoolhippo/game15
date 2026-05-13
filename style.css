@@ -1,0 +1,269 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html,
+body{
+  width:100%;
+  height:100%;
+
+  overflow:hidden;
+
+  background:#000;
+
+  font-family:'DotGothic16', sans-serif;
+}
+
+body{
+  overscroll-behavior:none;
+}
+
+#gameContainer{
+  position:relative;
+
+  width:100vw;
+  height:100vh;
+  height:100dvh;
+
+  overflow:hidden;
+
+  background:#000;
+}
+
+.screen{
+  display:none;
+
+  position:absolute;
+  inset:0;
+
+  width:100%;
+  height:100%;
+}
+
+.screen.active{
+  display:block;
+}
+
+/* 背景 */
+
+#titleBg,
+.resultBg{
+  position:absolute;
+  inset:0;
+
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+
+  image-rendering:pixelated;
+}
+
+#gameCanvas{
+  position:absolute;
+  inset:0;
+
+  width:100%;
+  height:100%;
+
+  display:block;
+
+  background:#000;
+
+  image-rendering:pixelated;
+}
+
+/* タイトル */
+
+#titleOverlay,
+#resultOverlay{
+  position:absolute;
+  inset:0;
+
+  display:flex;
+  flex-direction:column;
+
+  justify-content:center;
+  align-items:center;
+
+  text-align:center;
+
+  padding:24px;
+
+  background:rgba(0,0,0,0.22);
+
+  color:white;
+}
+
+h1{
+  font-size:52px;
+
+  line-height:1.15;
+
+  margin-bottom:28px;
+
+  text-shadow:
+    4px 4px #000;
+}
+
+#introText{
+  font-size:18px;
+
+  line-height:1.9;
+
+  text-shadow:
+    2px 2px #000;
+}
+
+#startBtn,
+#retryBtn{
+  margin-top:30px;
+
+  padding:14px 26px;
+
+  border:4px solid #222;
+
+  background:#f6e8a8;
+
+  color:#222;
+
+  font-family:'DotGothic16', sans-serif;
+
+  font-size:20px;
+
+  cursor:pointer;
+
+  image-rendering:pixelated;
+}
+
+#startBtn:active,
+#retryBtn:active{
+  background:#ffe98a;
+}
+
+/* 会話UI */
+
+#textBox{
+  position:absolute;
+
+  left:0;
+  bottom:0;
+
+  width:100%;
+
+  padding:
+    14px
+    14px
+    calc(18px + env(safe-area-inset-bottom));
+
+  background:#f6e8c8;
+
+  border-top:6px solid #222;
+
+  z-index:20;
+}
+
+#nameBox{
+  display:inline-block;
+
+  padding:6px 12px;
+
+  margin-bottom:12px;
+
+  background:#222;
+
+  color:#fff;
+
+  font-size:17px;
+}
+
+#message{
+  min-height:92px;
+
+  color:#222;
+
+  font-size:19px;
+
+  line-height:1.6;
+}
+
+/* 選択肢 */
+
+#choices{
+  display:flex;
+  flex-direction:column;
+
+  gap:8px;
+}
+
+.choiceBtn{
+  width:100%;
+
+  padding:10px 12px;
+
+  border:4px solid #222;
+
+  background:#fff7d0;
+
+  color:#222;
+
+  text-align:left;
+
+  font-family:'DotGothic16', sans-serif;
+
+  font-size:17px;
+
+  line-height:1.3;
+
+  cursor:pointer;
+}
+
+.choiceBtn:active{
+  background:#ffe98a;
+}
+
+/* 結果 */
+
+h2{
+  font-size:42px;
+
+  margin-bottom:18px;
+
+  text-shadow:4px 4px #000;
+}
+
+#resultMessage{
+  font-size:18px;
+
+  line-height:1.8;
+
+  text-shadow:2px 2px #000;
+}
+
+/* 小さい端末 */
+
+@media(max-height:740px){
+
+  h1{
+    font-size:44px;
+  }
+
+  #introText{
+    font-size:16px;
+  }
+
+  #message{
+    min-height:72px;
+
+    font-size:17px;
+  }
+
+  .choiceBtn{
+    font-size:15px;
+
+    padding:8px 10px;
+  }
+
+}
