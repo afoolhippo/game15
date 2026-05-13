@@ -2,109 +2,59 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1.0,viewport-fit=cover"
->
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <title>放課後カバメモリアル</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link
-  href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap"
-  rel="stylesheet"
->
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
 <div id="gameContainer">
 
-  <!-- タイトル -->
-
   <div id="titleScreen" class="screen active">
-
-    <img
-      src="pokimi_background.png"
-      id="titleBg"
-    >
+    <img src="pokimi_background.png" id="titleBg">
 
     <div id="titleOverlay">
-
-      <h1>
-        放課後<br>
-        カバメモリアル
-      </h1>
+      <h1>放課後カバ<br>メモリアル</h1>
 
       <p id="introText">
         僕は転校生のカバ太。<br><br>
-
         この学校には、<br>
         ちょっと変な子たちがいるらしい。<br><br>
-
         放課後、<br>
         屋上へ向かった。
       </p>
 
-      <button id="startBtn">
-        タップしてスタート
-      </button>
-
+      <button id="startBtn">タップしてスタート</button>
     </div>
-
   </div>
 
-  <!-- ゲーム -->
-
   <div id="gameScreen" class="screen">
-
     <canvas id="gameCanvas"></canvas>
 
     <div id="textBox">
-
-      <div id="nameBox">
-        ポキ美
-      </div>
-
+      <div id="nameBox">ポキ美</div>
       <div id="message"></div>
-
       <div id="choices"></div>
-
     </div>
-
   </div>
 
-  <!-- 結果 -->
-
   <div id="resultScreen" class="screen">
-
-    <img
-      src="pokimi_background.png"
-      class="resultBg"
-    >
+    <img src="pokimi_background.png" class="resultBg">
 
     <div id="resultOverlay">
-
       <h2 id="resultTitle"></h2>
-
       <p id="resultMessage"></p>
-
-      <button id="retryBtn">
-        もう1回
-      </button>
-
+      <button id="retryBtn">もう1回</button>
     </div>
-
   </div>
 
 </div>
 
 <script src="game.js"></script>
-
 </body>
 </html>
