@@ -2,11 +2,13 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
 const titleScreen = document.getElementById("titleScreen");
+const selectScreen = document.getElementById("selectScreen");
 const gameScreen = document.getElementById("gameScreen");
 const resultScreen = document.getElementById("resultScreen");
 
 const startBtn = document.getElementById("startBtn");
 const retryBtn = document.getElementById("retryBtn");
+const charButtons = document.querySelectorAll(".charBtn");
 
 const messageEl = document.getElementById("message");
 const choicesEl = document.getElementById("choices");
@@ -14,21 +16,12 @@ const nameBox = document.getElementById("nameBox");
 
 const resultTitle = document.getElementById("resultTitle");
 const resultMessage = document.getElementById("resultMessage");
-
-const titleBg = document.getElementById("titleBg");
 const resultBg = document.getElementById("resultBg");
-const introText = document.getElementById("introText");
 
 const characterData = {
   pokimi:{
     name:"ポキ美",
     background:"pokimi_background.png",
-
-    titleIntro:`僕は転校生のカバ太。<br><br>
-この学校には、<br>
-ちょっと変な子たちがいるらしい。<br><br>
-放課後、<br>
-屋上へ向かった。`,
 
     faces:{
       normal:"pokimi_normal.png",
@@ -119,12 +112,6 @@ const characterData = {
     name:"ナス子",
     background:"nasuko_background.png",
 
-    titleIntro:`僕は転校生のカバ太。<br><br>
-この学校には、<br>
-ちょっと変な子たちがいるらしい。<br><br>
-放課後、<br>
-河川敷へ向かった。`,
-
     faces:{
       normal:"nasuko_normal.png",
       smile:"nasuko_smile.png",
@@ -214,7 +201,7 @@ const characterData = {
   }
 };
 
-let currentCharacter;
+let currentCharacter = null;
 let currentFace = "normal";
 
 let faceImages = {};
@@ -240,51 +227,62 @@ resizeCanvas();
 
 window.addEventListener("resize",()=>{
   resizeCanvas();
+
   if(gameScreen.classList.contains("active")){
     drawScene();
   }
 });
 
-function chooseCharacter(){
-  const keys = Object.keys(characterData);
-  const randomKey = keys[Math.floor(Math.random() * keys.length)];
+function showScreen(screen){
+  titleScreen.classList.remove("active");
+  selectScreen.classList.remove("active");
+  gameScreen.classList.remove("active");
+  resultScreen.classList.remove("active");
 
-  currentCharacter = characterData[randomKey];
+  screen.classList.add("active");
+}
 
-  titleBg.src = currentCharacter.background;
+function loadCharacter(key){
+  currentCharacter = characterData[key];
+  currentFace = "normal";
+
   resultBg.src = currentCharacter.background;
+  bg = new Image();
   bg.src = currentCharacter.background;
-
-  introText.innerHTML = currentCharacter.titleIntro;
+  bg.onload = ()=>{
+    if(gameScreen.classList.contains("active")){
+      drawScene();
+    }
+  };
 
   faceImages = {};
 
-  for(const key in currentCharacter.faces){
+  for(const faceKey in currentCharacter.faces){
     const img = new Image();
-    img.src = currentCharacter.faces[key];
+    img.src = currentCharacter.faces[faceKey];
+
     img.onload = ()=>{
       if(gameScreen.classList.contains("active")){
         drawScene();
       }
     };
-    faceImages[key] = img;
+
+    faceImages[faceKey] = img;
   }
 }
-
-chooseCharacter();
 
 function drawScene(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
   const graphicAreaHeight = canvas.height * 0.52;
 
-  if(bg.complete){
+  if(bg.complete && bg.naturalWidth > 0){
     ctx.drawImage(
       bg,
       0,
       0,
-      bg.width,
-      bg.height,
+      bg.naturalWidth,
+      bg.naturalHeight,
       0,
       0,
       canvas.width,
@@ -294,7 +292,9 @@ function drawScene(){
 
   const face = faceImages[currentFace];
 
-  if(!face || !face.complete) return;
+  if(!face || !face.complete || face.naturalWidth === 0){
+    return;
+  }
 
   const size = canvas.width * 0.60;
   const drawX = (canvas.width - size) / 2;
@@ -392,9 +392,26 @@ function loadScene(){
   typeText(scene.text);
 }
 
+function startCharacter(key){
+  loadCharacter(key);
+
+  sceneIndex = 0;
+  empathy = 0;
+  tsukkomi = 0;
+  caution = 0;
+
+  messageEl.innerHTML = "";
+  choicesEl.innerHTML = "";
+
+  showScreen(gameScreen);
+  loadScene();
+}
+
 function endGame(){
-  gameScreen.classList.remove("active");
-  resultScreen.classList.add("active");
+  clearInterval(typingTimer);
+  typing = false;
+
+  showScreen(resultScreen);
 
   const success =
     currentCharacter.success(
@@ -406,36 +423,36 @@ function endGame(){
   if(success){
     resultTitle.innerHTML =
       currentCharacter.goodTitle.replace(/\n/g,"<br>");
+
     resultMessage.innerHTML =
       currentCharacter.goodMessage;
   }else{
     resultTitle.innerHTML =
       currentCharacter.badTitle.replace(/\n/g,"<br>");
+
     resultMessage.innerHTML =
       currentCharacter.badMessage;
   }
 }
 
 startBtn.onclick = ()=>{
-  titleScreen.classList.remove("active");
-  resultScreen.classList.remove("active");
-  gameScreen.classList.add("active");
-
-  sceneIndex = 0;
-  empathy = 0;
-  tsukkomi = 0;
-  caution = 0;
-
-  loadScene();
+  showScreen(selectScreen);
 };
 
+charButtons.forEach(btn=>{
+  btn.onclick = ()=>{
+    startCharacter(btn.dataset.char);
+  };
+});
+
 retryBtn.onclick = ()=>{
-  resultScreen.classList.remove("active");
-  gameScreen.classList.remove("active");
+  clearInterval(typingTimer);
+  typing = false;
 
-  chooseCharacter();
+  messageEl.innerHTML = "";
+  choicesEl.innerHTML = "";
 
-  titleScreen.classList.add("active");
+  showScreen(selectScreen);
 };
 
 messageEl.addEventListener("click",finishTyping);

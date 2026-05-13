@@ -16,8 +16,6 @@
 <div id="gameContainer">
 
   <div id="titleScreen" class="screen active">
-    <img src="pokimi_background.png" id="titleBg">
-
     <div id="titleOverlay">
       <h1>放課後カバ<br>メモリアル</h1>
 
@@ -26,10 +24,21 @@
         この学校には、<br>
         ちょっと変な子たちがいるらしい。<br><br>
         放課後、<br>
-        屋上へ向かった。
+        誰かと話すことになった。
       </p>
 
       <button id="startBtn">タップしてスタート</button>
+    </div>
+  </div>
+
+  <div id="selectScreen" class="screen">
+    <div id="selectOverlay">
+      <h2 id="selectTitle">誰と話す？</h2>
+
+      <div id="characterButtons">
+        <button class="charBtn" data-char="pokimi">ポキ美</button>
+        <button class="charBtn" data-char="nasuko">ナス子</button>
+      </div>
     </div>
   </div>
 
@@ -37,14 +46,14 @@
     <canvas id="gameCanvas"></canvas>
 
     <div id="textBox">
-      <div id="nameBox">ポキ美</div>
+      <div id="nameBox"></div>
       <div id="message"></div>
       <div id="choices"></div>
     </div>
   </div>
 
   <div id="resultScreen" class="screen">
-    <img src="pokimi_background.png" class="resultBg">
+    <img id="resultBg">
 
     <div id="resultOverlay">
       <h2 id="resultTitle"></h2>
