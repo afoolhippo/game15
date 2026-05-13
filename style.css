@@ -1,69 +1,207 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>放課後カバメモリアル</title>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+html,
+body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#000;
+  font-family:'DotGothic16',sans-serif;
+}
 
-<link rel="stylesheet" href="style.css">
-</head>
+body{
+  overscroll-behavior:none;
+}
 
-<body>
-<div id="gameContainer">
+#gameContainer{
+  position:relative;
+  width:100vw;
+  height:100vh;
+  height:100dvh;
+  overflow:hidden;
+  background:#000;
+}
 
-  <div id="titleScreen" class="screen active">
-    <div id="titleOverlay">
-      <h1>放課後カバ<br>メモリアル</h1>
+.screen{
+  display:none;
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
 
-      <p id="introText">
-        僕は転校生のカバ太。<br><br>
-        この学校には、<br>
-        ちょっと変な子たちがいるらしい。<br><br>
-        放課後、<br>
-        誰かと話すことになった。
-      </p>
+.screen.active{
+  display:block;
+}
 
-      <button id="startBtn">タップしてスタート</button>
-    </div>
-  </div>
+#gameCanvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  background:#000;
+  image-rendering:pixelated;
+}
 
-  <div id="selectScreen" class="screen">
-    <div id="selectOverlay">
-      <h2 id="selectTitle">誰と話す？</h2>
+#resultBg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  image-rendering:pixelated;
+}
 
-      <div id="characterButtons">
-        <button class="charBtn" data-char="pokimi">ポキ美</button>
-        <button class="charBtn" data-char="nasuko">ナス子</button>
-      </div>
-    </div>
-  </div>
+#titleOverlay,
+#selectOverlay,
+#resultOverlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:24px;
+  background:#7d5fff;
+  color:#fff;
+}
 
-  <div id="gameScreen" class="screen">
-    <canvas id="gameCanvas"></canvas>
+h1{
+  font-size:44px;
+  line-height:1.15;
+  margin-bottom:28px;
+  text-shadow:4px 4px #000;
+}
 
-    <div id="textBox">
-      <div id="nameBox"></div>
-      <div id="message"></div>
-      <div id="choices"></div>
-    </div>
-  </div>
+#introText{
+  font-size:18px;
+  line-height:1.8;
+  text-shadow:2px 2px #000;
+}
 
-  <div id="resultScreen" class="screen">
-    <img id="resultBg">
+#startBtn,
+#retryBtn,
+.charBtn{
+  margin-top:24px;
+  padding:14px 24px;
+  border:4px solid #222;
+  background:#f7e8a8;
+  color:#222;
+  font-size:18px;
+  font-family:'DotGothic16',sans-serif;
+  cursor:pointer;
+}
 
-    <div id="resultOverlay">
-      <h2 id="resultTitle"></h2>
-      <p id="resultMessage"></p>
-      <button id="retryBtn">もう1回</button>
-    </div>
-  </div>
+#startBtn:active,
+#retryBtn:active,
+.charBtn:active{
+  background:#ffe98a;
+}
 
-</div>
+#selectTitle{
+  font-size:34px;
+  margin-bottom:24px;
+  text-shadow:4px 4px #000;
+}
 
-<script src="game.js"></script>
-</body>
-</html>
+#characterButtons{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.charBtn{
+  width:220px;
+  margin-top:0;
+}
+
+#textBox{
+  position:absolute;
+  left:0;
+  bottom:0;
+  width:100%;
+  height:48%;
+  padding:14px 14px calc(18px + env(safe-area-inset-bottom));
+  background:#f6e8c8;
+  border-top:6px solid #222;
+  z-index:20;
+  overflow:hidden;
+}
+
+#nameBox{
+  display:inline-block;
+  padding:6px 12px;
+  margin-bottom:12px;
+  background:#222;
+  color:#fff;
+  font-size:17px;
+}
+
+#message{
+  min-height:84px;
+  color:#222;
+  font-size:18px;
+  line-height:1.5;
+}
+
+#choices{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.choiceBtn{
+  width:100%;
+  padding:9px 12px;
+  border:4px solid #222;
+  background:#fff7d0;
+  color:#222;
+  text-align:left;
+  font-size:16px;
+  line-height:1.3;
+  font-family:'DotGothic16',sans-serif;
+  cursor:pointer;
+}
+
+.choiceBtn:active{
+  background:#ffe98a;
+}
+
+#resultTitle{
+  font-size:36px;
+  margin-bottom:18px;
+  text-shadow:4px 4px #000;
+}
+
+#resultMessage{
+  font-size:18px;
+  line-height:1.8;
+  text-shadow:2px 2px #000;
+}
+
+@media(max-height:740px){
+  h1{
+    font-size:38px;
+  }
+
+  #introText{
+    font-size:15px;
+    line-height:1.7;
+  }
+
+  #message{
+    min-height:66px;
+    font-size:16px;
+  }
+
+  .choiceBtn{
+    font-size:14px;
+    padding:7px 10px;
+  }
+}
