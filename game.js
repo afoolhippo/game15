@@ -278,7 +278,7 @@ const characterData = {
         ]
       },
       {
-        face:"sad",
+        face:"shy",
         text:`…君、
 ちゃんとしてるね。`,
         choices:[
