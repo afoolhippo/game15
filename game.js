@@ -6,8 +6,13 @@ const selectScreen = document.getElementById("selectScreen");
 const gameScreen = document.getElementById("gameScreen");
 const resultScreen = document.getElementById("resultScreen");
 
+const titleImage = document.getElementById("titleImage");
 const startBtn = document.getElementById("startBtn");
 const retryBtn = document.getElementById("retryBtn");
+const backTitleBtn = document.getElementById("backTitleBtn");
+const shareBtn = document.getElementById("shareBtn");
+const homeBtn = document.getElementById("homeBtn");
+
 const charButtons = document.querySelectorAll(".charBtn");
 
 const messageEl = document.getElementById("message");
@@ -17,12 +22,18 @@ const nameBox = document.getElementById("nameBox");
 const resultTitle = document.getElementById("resultTitle");
 const resultMessage = document.getElementById("resultMessage");
 const resultBg = document.getElementById("resultBg");
+const resultCharacter = document.getElementById("resultCharacter");
+
+const GAME_TITLE = "放課後カバメモリアル";
+const GAME_URL = "https://afoolhippo.github.io/game15/";
+const HOME_URL = "https://afoolhippo.github.io/home/?skipTitle=1";
 
 const characterData = {
   pokimi:{
     name:"ポキ美",
+    place:"放課後に",
+    emoji:"🥒",
     background:"pokimi_background.png",
-
     faces:{
       normal:"pokimi_normal.png",
       smile:"pokimi_smile.png",
@@ -31,15 +42,11 @@ const characterData = {
       surprised:"pokimi_surprised.png",
       sad:"pokimi_sad.png"
     },
-
     goodTitle:"ちょっと\n仲良くなれた",
     goodMessage:"…また、<br>放課後に話せる気がした。",
-
     badTitle:"ポキッとは、\nいかなかった",
     badMessage:"きゅうりは、<br>思ったより難しかった。",
-
     success:(e,t,c)=> e>=3 && e<=7 && t>=2 && c<=3,
-
     scenes:[
       {
         face:"smile",
@@ -110,8 +117,9 @@ const characterData = {
 
   nasuko:{
     name:"ナス子",
+    place:"河川敷で",
+    emoji:"🍆",
     background:"nasuko_background.png",
-
     faces:{
       normal:"nasuko_normal.png",
       smile:"nasuko_smile.png",
@@ -120,15 +128,11 @@ const characterData = {
       surprised:"nasuko_surprised.png",
       sad:"nasuko_sad.png"
     },
-
     goodTitle:"ちょっと\n焼けてきた",
     goodMessage:"また今度、<br>河川敷で話そうぜ！",
-
     badTitle:"まだ、生っぽい",
     badMessage:"ナスは、<br>じっくり焼かないとダメらしい。",
-
     success:(e,t,c)=> e>=4 && e<=8 && t>=2 && c<=3,
-
     scenes:[
       {
         face:"smile",
@@ -198,6 +202,92 @@ const characterData = {
         ]
       }
     ]
+  },
+
+  migaki:{
+    name:"ミガキ",
+    place:"保健室で",
+    emoji:"🪥",
+    background:"migaki_background.png",
+    faces:{
+      normal:"migaki_normal.png",
+      smile:"migaki_smile.png",
+      shy:"migaki_shy.png",
+      confused:"migaki_confused.png",
+      surprised:"migaki_surprised.png",
+      sad:"migaki_sad.png"
+    },
+    goodTitle:"ちょっと\n磨けてきた",
+    goodMessage:"また、<br>保健室で話そうね。",
+    badTitle:"まだ、\n磨き残しがある",
+    badMessage:"歯みがきって、<br>思ったより難しい。",
+    success:(e,t,c)=> e>=3 && e<=7 && t>=1 && t<=4 && c<=3,
+    scenes:[
+      {
+        face:"smile",
+        text:`歯みがき粉って、
+最後の方ちょっと苦くなるよね。`,
+        choices:[
+          { text:"▶ わかる", empathy:2 },
+          { text:"▶ そんなことある？", tsukkomi:1 },
+          { text:"▶ 急にどうしたの？", caution:1 }
+        ]
+      },
+      {
+        face:"normal",
+        text:`保健室って、
+ちょっと静かすぎるよね。`,
+        choices:[
+          { text:"▶ 落ち着くけどね", empathy:1 },
+          { text:"▶ 寝そうになる", tsukkomi:1 },
+          { text:"▶ ちょっと怖い", caution:1 }
+        ]
+      },
+      {
+        face:"surprised",
+        text:`えっ！？
+
+歯ブラシ、
+濡らしてから使う派！？`,
+        choices:[
+          { text:"▶ ダメなの？", tsukkomi:1 },
+          { text:"▶ そのまま派かも", empathy:2 },
+          { text:"▶ そこ気にするんだ…", caution:1 }
+        ]
+      },
+      {
+        face:"shy",
+        text:`…歯みがきのあと、
+冷たい水飲むの好きなんだ。`,
+        choices:[
+          { text:"▶ あれ気持ちいいよね", empathy:2 },
+          { text:"▶ わりと分かる", empathy:1 },
+          { text:"▶ そこまで考えたことない", caution:1 }
+        ]
+      },
+      {
+        face:"confused",
+        text:`え…
+
+夜、
+磨かない日とかあるの？`,
+        choices:[
+          { text:"▶ たまにあるかも", tsukkomi:1 },
+          { text:"▶ 毎日磨いてるよ", empathy:2 },
+          { text:"▶ そんな顔しなくても…", caution:1 }
+        ]
+      },
+      {
+        face:"sad",
+        text:`…君、
+ちゃんとしてるね。`,
+        choices:[
+          { text:"▶ ミガキほどじゃないよ", tsukkomi:2 },
+          { text:"▶ そうかな", empathy:1 },
+          { text:"▶ 急に褒めるね", caution:1 }
+        ]
+      }
+    ]
   }
 };
 
@@ -211,6 +301,7 @@ let sceneIndex = 0;
 let empathy = 0;
 let tsukkomi = 0;
 let caution = 0;
+let lastSuccess = false;
 
 let typing = false;
 let typingTimer = null;
@@ -242,11 +333,19 @@ function showScreen(screen){
   screen.classList.add("active");
 }
 
+function resetText(){
+  clearInterval(typingTimer);
+  typing = false;
+  messageEl.innerHTML = "";
+  choicesEl.innerHTML = "";
+}
+
 function loadCharacter(key){
   currentCharacter = characterData[key];
   currentFace = "normal";
 
   resultBg.src = currentCharacter.background;
+
   bg = new Image();
   bg.src = currentCharacter.background;
   bg.onload = ()=>{
@@ -399,40 +498,83 @@ function startCharacter(key){
   empathy = 0;
   tsukkomi = 0;
   caution = 0;
+  lastSuccess = false;
 
-  messageEl.innerHTML = "";
-  choicesEl.innerHTML = "";
+  resetText();
 
   showScreen(gameScreen);
   loadScene();
 }
 
 function endGame(){
-  clearInterval(typingTimer);
-  typing = false;
+  resetText();
 
-  showScreen(resultScreen);
-
-  const success =
+  lastSuccess =
     currentCharacter.success(
       empathy,
       tsukkomi,
       caution
     );
 
-  if(success){
+  showScreen(resultScreen);
+
+  if(lastSuccess){
     resultTitle.innerHTML =
       currentCharacter.goodTitle.replace(/\n/g,"<br>");
 
     resultMessage.innerHTML =
       currentCharacter.goodMessage;
+
+    resultCharacter.src =
+      currentCharacter.faces.smile;
   }else{
     resultTitle.innerHTML =
       currentCharacter.badTitle.replace(/\n/g,"<br>");
 
     resultMessage.innerHTML =
       currentCharacter.badMessage;
+
+    resultCharacter.src =
+      currentCharacter.faces.sad;
   }
+}
+
+function shareOnX(){
+  if(!currentCharacter) return;
+
+  const cleanTitle =
+    resultTitle.innerText.replace(/\n/g," ");
+
+  const text =
+`${cleanTitle}${currentCharacter.emoji}
+
+${currentCharacter.name}と、
+${currentCharacter.place}話しました。
+
+無料ブラウザゲーム
+「${GAME_TITLE}」
+${GAME_URL}
+
+#放課後カバメモリアル
+#カバゲーセン`;
+
+  const shareUrl =
+    "https://twitter.com/intent/tweet?text=" +
+    encodeURIComponent(text);
+
+  window.open(shareUrl,"_blank");
+}
+
+function goTitle(){
+  resetText();
+  currentCharacter = null;
+  showScreen(titleScreen);
+}
+
+if(titleImage){
+  titleImage.onclick = ()=>{
+    showScreen(selectScreen);
+  };
 }
 
 startBtn.onclick = ()=>{
@@ -445,14 +587,20 @@ charButtons.forEach(btn=>{
   };
 });
 
+backTitleBtn.onclick = ()=>{
+  goTitle();
+};
+
 retryBtn.onclick = ()=>{
-  clearInterval(typingTimer);
-  typing = false;
+  goTitle();
+};
 
-  messageEl.innerHTML = "";
-  choicesEl.innerHTML = "";
+shareBtn.onclick = ()=>{
+  shareOnX();
+};
 
-  showScreen(selectScreen);
+homeBtn.onclick = ()=>{
+  location.href = HOME_URL;
 };
 
 messageEl.addEventListener("click",finishTyping);

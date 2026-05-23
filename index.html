@@ -3,67 +3,141 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+
 <title>放課後カバメモリアル</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
 <div id="gameContainer">
 
+  <!-- タイトル -->
+
   <div id="titleScreen" class="screen active">
-    <div id="titleOverlay">
-      <h1>放課後カバ<br>メモリアル</h1>
+
+    <div id="titleVisual">
+      <img src="title.png" id="titleImage">
+    </div>
+
+    <div id="titleBottom">
 
       <p id="introText">
         僕は転校生のカバ太。<br><br>
+
         この学校には、<br>
         ちょっと変な子たちがいるらしい。<br><br>
+
         放課後、<br>
         誰かと話すことになった。
       </p>
 
-      <button id="startBtn">タップしてスタート</button>
+      <button id="startBtn">
+        タップしてスタート
+      </button>
+
     </div>
+
   </div>
+
+  <!-- キャラ選択 -->
 
   <div id="selectScreen" class="screen">
+
     <div id="selectOverlay">
-      <h2 id="selectTitle">誰と話す？</h2>
+
+      <h2 id="selectTitle">
+        誰と話す？
+      </h2>
 
       <div id="characterButtons">
-        <button class="charBtn" data-char="pokimi">ポキ美</button>
-        <button class="charBtn" data-char="nasuko">ナス子</button>
+
+        <button class="charBtn" data-char="pokimi">
+          <img src="pokimi_normal.png">
+          <span>ポキ美</span>
+        </button>
+
+        <button class="charBtn" data-char="nasuko">
+          <img src="nasuko_normal.png">
+          <span>ナス子</span>
+        </button>
+
+        <button class="charBtn" data-char="migaki">
+          <img src="migaki_normal.png">
+          <span>ミガキ</span>
+        </button>
+
       </div>
+
     </div>
+
   </div>
+
+  <!-- ゲーム -->
 
   <div id="gameScreen" class="screen">
+
     <canvas id="gameCanvas"></canvas>
 
+    <button id="backTitleBtn">
+      タイトルへ戻る
+    </button>
+
     <div id="textBox">
+
       <div id="nameBox"></div>
+
       <div id="message"></div>
+
       <div id="choices"></div>
+
     </div>
+
   </div>
 
+  <!-- 結果 -->
+
   <div id="resultScreen" class="screen">
+
     <img id="resultBg">
 
     <div id="resultOverlay">
+
+      <img id="resultCharacter">
+
       <h2 id="resultTitle"></h2>
+
       <p id="resultMessage"></p>
-      <button id="retryBtn">もう1回</button>
+
+      <div id="resultButtons">
+
+        <button id="shareBtn">
+          Xでシェア
+        </button>
+
+        <button id="retryBtn">
+          もう1回遊ぶ
+        </button>
+
+        <button id="homeBtn">
+          カバゲーセンへ
+        </button>
+
+      </div>
+
     </div>
+
   </div>
 
 </div>
 
 <script src="game.js"></script>
+
 </body>
 </html>
